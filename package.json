@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=prod node App",
-    "dev": "nodemon --delay 1 app",
+    "start": "NODE_ENV=prod node app.js",
+    "dev": "nodemon -i /test --delay 1.5 app.js",
     "prd": "pm2 start bin/www",
-    "test": "NODE_ENV=test mocha './test/*/*.test.js' -t 5000",
+    "test": "NODE_ENV=test mocha './test/*/*.test.js' -t 5000 --file './test/mocha_help.js' --exit",
     "lint": "eslint ./",
     "fix": "eslint ./ --fix"
   },

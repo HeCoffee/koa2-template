@@ -35,9 +35,9 @@ app.use(responseFormat)
 app.use(requestParams)
 
 // routes
-const files = fs.readdirSync('./routes')
+const files = fs.readdirSync('./app/routes')
 files.forEach(function (fileName, index) {
-  let routes = require(`./routes/${fileName}`)
+  let routes = require(`./app/routes/${fileName}`)
   app.use(routes.routes(), routes.allowedMethods())
 })
 

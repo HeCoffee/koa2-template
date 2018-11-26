@@ -1,10 +1,11 @@
 const router = require('koa-router')()
-const ApiError = require('../utils/ApiError')
+const ApiError = require('../../utils/ApiError')
+const { prefix } = require('../../utils/Constant')
 
-router.prefix('/users')
+router.prefix(`${prefix}/users`)
 
 router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!'
+  ctx.body = 'this is a users response'
 })
 
 router.get('/bar', function (ctx, next) {

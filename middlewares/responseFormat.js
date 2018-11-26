@@ -22,7 +22,8 @@ const responseFormat = async (ctx, next) => {
       code: err.code || -1,
       messages: ErrorMsg[err.code] || err.message
     }
-    ctx.logger.error('err:', ctx.body, 'params:', ctx.params)
+    const errType = err instanceof ApiError ? 'info' : 'error'
+    ctx.logger[errType]('url:', ctx.request.url, 'err:', ctx.body, 'params:', ctx.params)
   }
 }
 
