@@ -1,5 +1,5 @@
 /**
- * [requestParams 封装请求参数]
+ * [requestParams 将所有请求参数(query、body)封装成params]
  * @param  {Context}   ctx
  * @param  {Function}  next
  * @return {Promise}

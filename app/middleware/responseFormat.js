@@ -1,5 +1,5 @@
-const ApiError = require('../utils/ApiError')
-const { ErrorMsg } = require('../utils/Constant')
+const ApiError = require('../../utils/ApiError')
+const { ErrorMsg } = require('../../utils/Constant')
 /**
  * [responseFormat 封装response数据结构]
  * @param  {Context}   ctx
@@ -13,17 +13,18 @@ const responseFormat = async (ctx, next) => {
     if (!ctx.response.header['content-type'].match('text/html')) {
       ctx.body = {
         code: 0,
-        messages: 'success',
-        data: ctx.body || {}
+        message: 'success',
+        data: ctx.body
       }
     }
   } catch (err) {
+    // 业务级别错误 info 系统级别错误 error
+    const errType = err instanceof ApiError ? 'info' : 'error'
     ctx.body = {
       code: err.code || -1,
-      messages: ErrorMsg[err.code] || err.message
+      message: errType === 'info' ? (ErrorMsg[err.code] || err.message) : '服务器出小差'
     }
-    const errType = err instanceof ApiError ? 'info' : 'error'
-    ctx.logger[errType]('url:', ctx.request.url, 'err:', ctx.body, 'params:', ctx.params)
+    ctx.logger[errType]('err:', err)
   }
 }
 

@@ -29,14 +29,4 @@ const dailyLogger = tracer.dailyfile({
   }
 })
 
-const logger = isProd ? dailyLogger : colorLogger
-
-async function loggerMiddleware (ctx, next) {
-  ctx.logger = ctx.logger || logger
-  await next()
-}
-
-module.exports = {
-  logger,
-  loggerMiddleware
-}
+module.exports = isProd ? dailyLogger : colorLogger

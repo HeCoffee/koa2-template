@@ -6,16 +6,18 @@ const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
+// const xmlParser = require('koa-xml-body')
 const logger = require('koa-logger')
-const requestParams = require('./middlewares/requestParams')
-const responseFormat = require('./middlewares/responseFormat')
-const { loggerMiddleware } = require('./utils/Logger')
+const requestParams = require('./app/middleware/requestParams')
+const responseFormat = require('./app/middleware/responseFormat')
+const log = require('./app/middleware/log')
 const fs = require('fs')
 const port = config.get('port')
 // error handler
 onerror(app)
 
 // middlewares
+// app.use(xmlParser())
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
 }))
@@ -23,21 +25,23 @@ app.use(json())
 app.use(logger())
 
 app.use(require('koa-static')(`${__dirname}/public`))
-app.use(views(`${__dirname}/views`, {
+app.use(views(`${__dirname}/app/view`, {
   extension: 'pug'
 }))
 
-// logger
-app.use(loggerMiddleware)
-
-// handle req  res
-app.use(responseFormat)
+// handle req
 app.use(requestParams)
 
-// routes
-const files = fs.readdirSync('./app/routes')
+// logger
+app.use(log)
+
+// handle res
+app.use(responseFormat)
+
+// route
+const files = fs.readdirSync('./app/route')
 files.forEach(function (fileName, index) {
-  let routes = require(`./app/routes/${fileName}`)
+  let routes = require(`./app/route/${fileName}`)
   app.use(routes.routes(), routes.allowedMethods())
 })
 
