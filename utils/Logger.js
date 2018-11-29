@@ -14,6 +14,9 @@ const colorLogger = tracer.colorConsole({
   }
 })
 
+/**
+ * [logger 输出日志 根据日期写入log文件]
+ */
 const dailyLogger = tracer.dailyfile({
   root: './logs',
   maxLogFiles: 10,

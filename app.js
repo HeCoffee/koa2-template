@@ -38,11 +38,11 @@ app.use(log)
 // handle res
 app.use(responseFormat)
 
-// route
-const files = fs.readdirSync('./app/route')
-files.forEach(function (fileName, index) {
-  let routes = require(`./app/route/${fileName}`)
-  app.use(routes.routes(), routes.allowedMethods())
+// router
+const routers = fs.readdirSync('./app/router')
+routers.forEach(function (fileName, index) {
+  let router = require(`./app/router/${fileName}`)
+  app.use(router.routes(), router.allowedMethods())
 })
 
 // error-handling
