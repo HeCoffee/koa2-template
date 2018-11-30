@@ -17,15 +17,15 @@
 ### npm script
 
 ``` bash
-npm run dev  # 开发环境
+npm run dev   # 开发环境
 
-npm start    # 正式环境
+npm start     # 正式环境
 
-npm run test # 运行单元测试
+npm run test  # 运行单元测试
 
-npm run lint # 代码风格检测
+npm run lint  # 代码风格检测
 
-npm run fix  # 修复有误代码风格
+npm run fix   # 修复有误代码风格
 ```
 
 ### app.js
@@ -35,12 +35,12 @@ npm run fix  # 修复有误代码风格
 app文件夹主要用来放置业务相关的代码，采用MVC设计模式目录如下
 ``` bash
 app
- ├── controller # 控制层
- ├── middleware # app中间件
- ├── model      # 模型层 数据库相关模型
+ ├── controller  # 控制层
+ ├── middleware  # app中间件
+ ├── model       # 模型层 数据库相关模型
  ├── router      # 路由
- ├── service    # 服务层
- └── view       # 视图层
+ ├── service     # 服务层
+ └── view        # 视图层
 ```
 
 #### controller 控制层
@@ -67,7 +67,7 @@ module.exports.get = async (ctx, next) => {
   })
 }
 ```
-** [joi](https://github.com/hapijs/joi)提供了强大的校验参数功能 **
+**[joi](https://github.com/hapijs/joi)提供了强大的校验参数功能**
 
 #### middleware
 根据业务编写中间件，例如：封装上下文，校验token，封装response，输出请求日志
@@ -118,8 +118,8 @@ app.use(views(`${__dirname}/app/view`, {
 也可以根据实际情况改用其他模板不过需要安装相关渲染引擎包
 
 ### 代码风格
-- [eslint](https://github.com/eslint/eslint) | [中文](https://cn.eslint.org/)
-- [standard](https://github.com/feross/standard) | [中文](https://standardjs.com/readme-zhcn.html)
+- [eslint](https://github.com/eslint/eslint) | [中文文档](https://cn.eslint.org/)
+- [standard](https://github.com/feross/standard) | [中文文档](https://standardjs.com/readme-zhcn.html)
 
 ### 日志输出
 
@@ -131,6 +131,6 @@ app.use(views(`${__dirname}/app/view`, {
 - moment
 
 ### Koa2 相关
-- [Koa2 中文官网](https://koa.bootcss.com)
+- [Koa2](https://github.com/koajs/koa)
 - [洋葱模型](https://segmentfault.com/a/1190000013981513)
 - [浅谈express、koa和koa2](https://www.jianshu.com/p/3806417a1991?from=timeline)
