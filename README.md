@@ -119,8 +119,9 @@ app.use(views(`${__dirname}/app/view`, {
 
 
 ### ApiError
-封装一个错误类，用来中间件区别开业务错误以及系统错误，做出不同输出。
+封装一个错误类，中间件可区别开业务错误以及系统错误，做出不同输出。
 ``` js
+// ApiError.js
 class ApiError extends Error {
   constructor (message, code = -1) {
     super(message)
@@ -129,6 +130,10 @@ class ApiError extends Error {
 }
 
 module.exports = ApiError
+
+// app/middleware/responseFormat.js:22
+// 业务级别错误 info 系统级别错误 error
+const errType = err instanceof ApiError ? 'info' : 'error'
 ```
 
 
