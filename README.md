@@ -117,20 +117,118 @@ app.use(views(`${__dirname}/app/view`, {
 ```
 也可以根据实际情况改用其他模板不过需要安装相关渲染引擎包
 
+
+### ApiError
+封装一个错误类，用来中间件区别开业务错误以及系统错误，做出不同输出。
+``` js
+class ApiError extends Error {
+  constructor (message, code = -1) {
+    super(message)
+    this.code = isNaN(message) ? code : message
+  }
+}
+
+module.exports = ApiError
+```
+
+
+### 日志输出
+使用 [tracer](https://www.npmjs.com/package/tracer) 进行日志输出
+根据环境进行不同输出，本地环境在控制面板输出，生产环境会写入以日期命名的log文件，方便出现bug时可查阅日志。
+
+具体实现，查看 /utils/Logger.js
+
+log中间件，输出请求参数以及请求结果，以便追踪请求
+
+``` js
+// app/middleware/log.js
+const logger = require('../../utils/Logger')
+
+const log = async (ctx, next) => {
+  ctx.logger = ctx.logger || logger
+  ctx.logger.info('receive', ctx.url, ctx.params)
+  await next()
+  ctx.logger.info('response', ctx.body)
+}
+
+module.exports = log
+```
+
+经过中间件封装后，可直接从上下文(ctx)调用logger
+
+相关service集成 base类后 可直接调用this.logger
+
+### 封装请求结果 中间件
+封装请求结果有两个目的
+1.统一请求结果数据结构
+2.捕捉错误，统一封装错误信息数据结构
+
+系统运行难免会遇到各种错误，业务级别或者系统级别的，这些错误 若不统一数据结构，前端不好操作。为此，捕捉错误封装结果并且根据级别输出日志。
+
+详细代码可看 app/middleware/responseFormat.js
+
+### 参数校验 joi
+用法简单，功能强大。不需要编写多个if去判断请求参数。
+
+详细文档 [joi](https://github.com/hapijs/joi)
+
+将校验函数（validate）再封装一层，使得校验失败时，抛出业务错误，以便中间件捕获，放回结果到前端。
+
+``` js
+const Joi = require('joi')
+const validate = Joi.validate
+
+Joi.validate = (value, schema, options = {
+  convert: true, // 尝试安所需转换类型
+  abortEarly: false, // 发现第一个错误是否停止继续检验
+  stripUnknown: true, // 是否删除未定义属性
+  allowUnknown: false // 是否允许包含未定义属性
+}) => {
+  const validateResult = validate.call(Joi, value, schema, options)
+  if (validateResult && validateResult.error) {
+    throw validateResult.error
+  }
+  // 返回处理过的参数
+  return validateResult.value
+}
+
+module.exports = Joi
+```
+
+
+### 常量
+1.utils/Constant.js
+
+2.[config](https://github.com/lorenwest/node-config)
+
+#### 两者区别
+
+Constant是业务常量，放置与业务相关的常量量。例如：错误信息，请求前缀，常用列表等。
+
+config是环境常量，放置不同环境下同名的常量。例如：数据库连接，应用环境，各种id/secret/key等。可参考config文件夹
+
+
+### 常用的库
+- 日期处理函数 [moment](http://momentjs.cn/)
+- 微信公众号相关 [co-wechat-api](https://github.com/node-webot/co-wechat-api)
+- 微信网页授权 [co-wechat-oauth](https://github.com/node-webot/co-wechat-oauth)
+- redis客户端 [ioredis](https://github.com/luin/ioredis#readme)
+
+
+### 不常用的库
+- 定时任务 [node-schedule](https://github.com/node-schedule/node-schedule#readme)
+- JobScheduler（任务队列） [Agenda](https://github.com/agenda/agenda#readme)
+
+
 ### 代码风格
 - [eslint](https://github.com/eslint/eslint) | [中文文档](https://cn.eslint.org/)
 - [standard](https://github.com/feross/standard) | [中文文档](https://standardjs.com/readme-zhcn.html)
 
-### 日志输出
-
-### 技术栈
-- mocha
-- joi
-- eslint
-- tracer
-- moment
 
 ### Koa2 相关
 - [Koa2](https://github.com/koajs/koa)
 - [洋葱模型](https://segmentfault.com/a/1190000013981513)
 - [浅谈express、koa和koa2](https://www.jianshu.com/p/3806417a1991?from=timeline)
+
+----
+> 积累项目经验，持续完善ing.....
