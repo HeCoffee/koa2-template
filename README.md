@@ -43,7 +43,7 @@ app
  └── view        # 视图层
 ```
 
-#### controller 控制层
+### controller
 
 controller 主要负责校验，转发（重定向），或者渲染模板
 
@@ -69,17 +69,17 @@ module.exports.get = async (ctx, next) => {
 ```
 **[joi](https://github.com/hapijs/joi)提供了强大的校验参数功能**
 
-#### middleware
+### middleware
 根据业务编写中间件，例如：封装上下文，校验token，封装response，输出请求日志
 
-#### model
+### model
 数据库模型，用的比较多是 [MySQL](https://www.mysql.com/) 和 [MongoDB](https://www.mongodb.com/), npm上有相关包提供，功能完善且稳定。
 
-MySQL 推荐 [sequelize](https://github.com/sequelize/sequelize#readme)
+**MySQL** 推荐 [sequelize](https://github.com/sequelize/sequelize#readme)
 
-MongoDB 推荐 [mongoose](https://www.npmjs.com/package/mongoose)
+**MongoDB** 推荐 [mongoose](https://www.npmjs.com/package/mongoose)
 
-#### router
+### router
 [koa-router](https://www.npmjs.com/package/koa-router) 配置http请求的路由
 ``` js
 // router/user.js
@@ -98,10 +98,10 @@ routers.forEach(function (fileName, index) {
 })
 ```
 
-#### service
+### service
 实现主要业务，以及与数据库交互
 
-#### view
+### view
 视图层主要放置html相关模板
 
 [koa-views](https://github.com/queckezz/koa-views) 引用[Consolidate](https://github.com/tj/consolidate.js)支持多种模板引擎
