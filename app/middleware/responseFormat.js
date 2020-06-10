@@ -24,7 +24,7 @@ const responseFormat = async (ctx, next) => {
       code: err.code || -1,
       message: errType === 'info' ? (ErrorMsg[err.code] || err.message) : '服务器出小差'
     }
-    ctx.logger[errType]('err:', err)
+    ctx.logger[errType](`${errType}:`, errType === 'info' ? `${err.code} ${err.message}` : err)
   }
 }
 
